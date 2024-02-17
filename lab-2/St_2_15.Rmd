@@ -15,10 +15,38 @@ SCC <- readRDS("Source_Classification_Code.rds")
 ```
 
 ```{r}
-result <- NEI %>% group_by(year) %>% summarize(Emissions = sum(Emissions))
-plot(result$year, result$Emissions, 
+q1_result <- NEI %>% group_by(year) %>% summarize(Emissions = sum(Emissions))
+plot(q1_result$year, q1_result$Emissions, 
      type = "b", 
      main = "Total PM2.5 Emissions by Year",
      xlab = "Year", 
      ylab = "Total PM2.5 Emissions")
+```
+
+```{r}
+q2_result <- NEI %>% filter(fips == "24510") %>% group_by(year) %>% summarize(Emissions = sum(Emissions))
+plot(q2_result$year, q2_result$Emissions, 
+     type = "b", 
+     main = "Total PM2.5 Emissions in Baltimore by Year",
+     xlab = "Year", 
+     ylab = "Total PM2.5 Emissions in Baltimore")
+```
+
+```{r}
+q3_result <- NEI %>% filter(fips == "24510") %>% group_by(year, type) %>% summarize(Emissions = sum(Emissions))
+```
+
+```{r}
+coal_sources <- SCC %>% filter(grepl("coal", Short.Name, ignore.case = TRUE)) %>% select(SCC)
+q4_result <- NEI %>% filter(SCC %in% coal_sources$SCC) %>% group_by(year) %>% summarize(Emissions = sum(Emissions))
+```
+
+```{r}
+vehicle_sources <- SCC %>% filter(grepl("vehicle", Short.Name, ignore.case = TRUE)) %>% select(SCC)
+## Add  filter(fips == "24510") or simplify
+q5_result <- NEI %>% filter(SCC %in% coal_sources$SCC) %>% group_by(year) %>% summarize(Emissions = sum(Emissions))
+```
+
+```{r}
+## Two plots simmilar to 5
 ```
