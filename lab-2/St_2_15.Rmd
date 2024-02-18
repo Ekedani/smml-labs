@@ -6,6 +6,7 @@ output: html_notebook
 
 ```{r}
 library("dplyr")
+library("lattice")
 ```
 
 ```{r}
@@ -48,7 +49,17 @@ axis(side = 1, at = q2_result$year, labels = q2_result$year)
 q3_result <- NEI %>%
   filter(fips == "24510") %>% 
   group_by(year, type) %>% 
-  summarize(Emissions = sum(Emissions))
+  summarize(Emissions = sum(Emissions), .groups = "drop")
+
+panel_function <- function(x, y, ...) {
+  panel.xyplot(x, y, type = "b", ...)
+}
+
+xyplot(Emissions ~ year | type, data = q3_result, layout = c(4, 1),
+       scales = list(x = list(at = unique(q3_result$year)), y = list(relation = "same")),
+       panel = panel_function,
+       xlab = "Year", ylab = "Total PM2.5 Emissions",
+       main = "PM2.5 Emissions by Year and Type")
 ```
 
 ```{r}
@@ -90,5 +101,24 @@ axis(side = 1, at = q5_result$year, labels = q5_result$year)
 ```
 
 ```{r}
-## Two plots simmilar to 5 and 3
+vehicle_sources <- SCC %>% 
+  filter(grepl("vehicle", Short.Name, ignore.case = TRUE))
+
+q6_result <- NEI %>%
+  filter(SCC %in% vehicle_sources$SCC & (fips == "24510" | fips == "06037")) %>% 
+  group_by(year, fips) %>% 
+  summarize(Emissions = sum(Emissions), .groups = "drop")
+
+unique_years <- unique(q6_result$year)
+
+panel_function <- function(x, y, ...) {
+  panel.xyplot(x, y, type = "b", ...)
+}
+
+# Create lattice plot with panel plots for each fips
+xyplot(Emissions ~ year | fips, data = q6_result, layout = c(2, 1),
+       scales = list(x = list(at = unique_years)),  # Customize x-axis ticks
+       panel = panel_function,
+       xlab = "Year", ylab = "Total PM2.5 Emissions",
+       main = "PM2.5 Emissions by Year and City")
 ```
