@@ -1,0 +1,22 @@
+## Огляд
+## Симуляції
+```{r}
+lambda = 0.2
+distributions_num = 40
+simulations_num = 1000
+
+simulation_list <- replicate(simulations_num, mean(rexp(distributions_num, lambda)))
+hist(simulation_list)
+```
+## Середнє значення вибірки проти теоретичного середнього значення
+```{r}
+mean(simulation_list)
+```
+## Дисперсія вибірки проти теоретичної дисперсії
+```{r}
+var(simulation_list)
+```
+## Розподіл
+```{r}
+
+```
