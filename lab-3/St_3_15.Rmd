@@ -1,22 +1,56 @@
+---
+title: "Лабораторна робота 3. Статистичне висновування"
+author: "Команда №15"
+output: html_notebook
+---
+
 ## Огляд
+
 ## Симуляції
+
 ```{r}
 lambda = 0.2
 distributions_num = 40
 simulations_num = 1000
-
 simulation_list <- replicate(simulations_num, mean(rexp(distributions_num, lambda)))
-hist(simulation_list)
 ```
+
 ## Середнє значення вибірки проти теоретичного середнього значення
+
+Пошук середнього значення вибірки та теоретичного середнього значення
+
 ```{r}
-mean(simulation_list)
+mean_of_simulations <- mean(simulation_list)
+theoretical_mean <- 1/lambda
 ```
-## Дисперсія вибірки проти теоретичної дисперсії
+
+### Гістограма
+
 ```{r}
-var(simulation_list)
+hist(simulation_list, col='white')
+abline(v = c(theoretical_mean, mean_of_simulations), col = c('red', 'green'), lwd = 2, lty = 'dashed')
+legend("topright", c('Theoretical', 'Generated'), col = c('red', 'green'), lwd = 2, lty = 'dashed')
+```
+
+```{r}
+paste("Mean of sim", mean_of_simulations)
+paste("Theor mean", theoretical_mean)
+```
+
+## Дисперсія вибірки проти теоретичної дисперсії
+
+```{r}
+variance_of_simulations <- var(simulation_list)
+theoretical_variance <- (1/(lambda)^2)/distributions_num
+```
+
+```{r}
+paste("var of sim", variance_of_simulations)
+paste("Theor var", theoretical_variance)
 ```
 ## Розподіл
+
 ```{r}
 
 ```
+
