@@ -34,7 +34,7 @@ hist(simulation_list, col='white')
 abline(v = c(theoretical_mean, mean_of_simulations), col = c('red', 'green'), lwd = 2, lty = 'dashed')
 legend("topright", c('Theoretical', 'Generated'), col = c('red', 'green'), lwd = 2, lty = 'dashed')
 ```
-ПОРІВНЯТИ 
+
 ```{r}
 paste("Mean of sim", mean_of_simulations)
 paste("Theor mean", theoretical_mean)
@@ -50,19 +50,19 @@ theoretical_variance <- (1/(lambda)^2)/distributions_num
 ```
 
 Виведемо отримані значення.
-
-СКАЗАТИ НАСКІЛЬКИ ВІН МІНЛИВИЙ ТА ПОРІВНЯТИ З ТЕОР ДИСПЕРСІФЄЮ
+Бачимо, що значення обох результатів відрізняються незначно.
 
 ```{r}
 paste("var of sim", variance_of_simulations)
 paste("Theor var", theoretical_variance)
 ```
+
 ## Розподіл
 
-ЧОМУ ТАКІ МЕТОДИ ОБРАЛИ
+Щоб довести, що розподіл є нормальним, побудуємо і дослідимо гістограму. Отримана гістограма має дзвіноподібну форму
+Також нанесемо лінію щільності нормального розпоідлу за допомогою функції lines. Щільність масштабується таким чином, щоб вона відповідала побудованій гістограмі.
+Отриманий результат приблизно відповідає нормальному розподілу. 
 
-ПОЯСНИТИ 2 ЛАСТ РЯДКИ ЧАНКА
-(для центральної гран теореми)
 ```{r}
 hist_data <- hist(simulation_list)
 max_hist <- max(hist_data$counts)
@@ -70,6 +70,8 @@ max_hist <- max(hist_data$counts)
 x_values <- seq(min(simulation_list), max(simulation_list), length.out = 100)
 lines(x_values, dnorm(x_values, mean = mean_of_simulations, sd = sqrt(variance_of_simulations)) * sum(hist_data$counts) * diff(hist_data$breaks[1:2]), col = 'red', lwd = 2)
 ```
+
+Також можемо скористатись методом побудови Q-Q графіку. Червоним кольором нанесено очікувані значення нормального розподілу, а чорним - отримані нами значення. Бачимо, що розподіл є приблизно нормальним.
 
 ```{r}
 qqnorm(simulation_list)
